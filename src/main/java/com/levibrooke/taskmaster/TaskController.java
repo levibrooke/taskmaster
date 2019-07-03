@@ -27,7 +27,13 @@ public class TaskController {
 
     @PostMapping("/tasks")
     public @ResponseBody Task createTask(@ModelAttribute Task task) {
-        task.setStatus(statusOptions[0]);
+
+        if (task.assigneeIsEmpty() == false) {
+            task.setStatus(statusOptions[1]);
+        } else if (task.assigneeIsEmpty() == true) {
+            task.setStatus(statusOptions[0]);
+        }
+
         taskRepository.save(task);
         return taskRepository.findById(task.getId()).get();
     }
@@ -52,5 +58,19 @@ public class TaskController {
     public void deleteTask(@PathVariable String id) {
         Task task = taskRepository.findById(id).get();
         taskRepository.delete(task);
+    }
+
+    @GetMapping("/users/{name}/tasks")
+    public List<Task> getTasksByUser(@PathVariable String name) {
+        return taskRepository.findByAssignee(name);
+    }
+
+    @PutMapping("/tasks/{id}/assign/{assignee}")
+    public @ResponseBody Task updateTaskAssignee(@PathVariable String id, @PathVariable String assignee) {
+        Task task = taskRepository.findById(id).get();
+        task.setAssignee(assignee);
+        task.setStatus(statusOptions[1]);
+        taskRepository.save(task);
+        return taskRepository.findById(id).get();
     }
 }
