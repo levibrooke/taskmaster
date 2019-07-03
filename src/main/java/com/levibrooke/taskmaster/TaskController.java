@@ -5,6 +5,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class TaskController {
 
@@ -28,5 +30,8 @@ public class TaskController {
         return taskRepository.findById(task.getId()).get();
     }
 
-    
+    @GetMapping("/tasks")
+    public List<Task> getTasks() {
+        return (List<Task>) taskRepository.findAll();
+    }
 }
