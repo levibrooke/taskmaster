@@ -11,12 +11,14 @@ public class Task {
     String title;
     String description;
     String status;
+    String assignee;
 
     public Task() {}
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String status, String assignee) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.assignee = assignee;
     }
 
     @DynamoDBHashKey
@@ -40,6 +42,11 @@ public class Task {
         return status;
     }
 
+    @DynamoDBAttribute
+    public String getAssignee() {
+        return assignee;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -54,5 +61,16 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public boolean assigneeIsEmpty() {
+        if (this.getAssignee() == "" || this.getAssignee() == null) {
+            return true;
+        }
+        return false;
     }
 }
