@@ -64,4 +64,13 @@ public class TaskController {
     public List<Task> getTasksByUser(@PathVariable String name) {
         return taskRepository.findByAssignee(name);
     }
+
+    @PutMapping("/tasks/{id}/assign/{assignee}")
+    public @ResponseBody Task updateTaskAssignee(@PathVariable String id, @PathVariable String assignee) {
+        Task task = taskRepository.findById(id).get();
+        task.setAssignee(assignee);
+        task.setStatus(statusOptions[1]);
+        taskRepository.save(task);
+        return taskRepository.findById(id).get();
+    }
 }
