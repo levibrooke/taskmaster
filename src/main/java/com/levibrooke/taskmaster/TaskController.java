@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@CrossOrigin
+@RequestMapping("/api")
 public class TaskController {
     private String[] statusOptions = {"Available", "Assigned", "Accepted", "Finished"};
 
