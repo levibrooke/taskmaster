@@ -1,9 +1,12 @@
 package com.levibrooke.taskmaster;
 
+import com.levibrooke.taskmaster.S3Client;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,8 +17,15 @@ import java.util.List;
 public class TaskController {
     private String[] statusOptions = {"Available", "Assigned", "Accepted", "Finished"};
 
+    private S3Client s3Client;
+
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
+    TaskController(S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
 
     private DynamoDBMapper dynamoDBMapper;
 
@@ -72,6 +82,15 @@ public class TaskController {
         Task task = taskRepository.findById(id).get();
         task.setAssignee(assignee);
         task.setStatus(statusOptions[1]);
+        taskRepository.save(task);
+        return taskRepository.findById(id).get();
+    }
+
+    @PostMapping("/tasks/{id}/images")
+    public @ResponseBody Task uploadTaskImage(@PathVariable String id, @RequestPart(value = "file") MultipartFile file) {
+        String pic = this.s3Client.uploadFile(file);
+        Task task = taskRepository.findById(id).get();
+        task.setPic(pic);
         taskRepository.save(task);
         return taskRepository.findById(id).get();
     }
