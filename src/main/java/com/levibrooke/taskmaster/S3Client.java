@@ -31,7 +31,7 @@ public class S3Client {
     @Value("${amazon.aws.secretkey}")
     private String secretKey;
 
-    @Value("${amazon.aws.bucket}")
+    @Value("${amazon.s3.bucket}")
     private String bucket;
 
 
