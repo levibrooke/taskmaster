@@ -92,6 +92,6 @@ public class TaskController {
         Task task = taskRepository.findById(id).get();
         task.setPic(pic);
         taskRepository.save(task);
-        return taskRepository.findById(id).get();
+        return task;
     }
 }
