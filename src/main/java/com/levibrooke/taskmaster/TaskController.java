@@ -91,6 +91,15 @@ public class TaskController {
         String pic = this.s3Client.uploadFile(file);
         Task task = taskRepository.findById(id).get();
         task.setPic(pic);
+
+        int indexOfSlash = task.getPic().lastIndexOf("/");
+
+        String fileName = pic.substring(indexOfSlash + 1);
+
+        String resizedBucket = "https://taskmaster-image-upload-resized.s3-us-west-2.amazonaws.com/resized-";
+
+        task.setResizedPic(resizedBucket + fileName);
+
         taskRepository.save(task);
         return task;
     }

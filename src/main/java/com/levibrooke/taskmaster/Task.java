@@ -13,6 +13,7 @@ public class Task {
     String status;
     String assignee;
     String pic;
+    String resizedPic;
 
     public Task() {}
     public Task(String title, String description, String status, String assignee) {
@@ -57,6 +58,11 @@ public class Task {
         return pic;
     }
 
+    @DynamoDBAttribute
+    public String getResizedPic() {
+        return resizedPic;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -79,6 +85,10 @@ public class Task {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public void setResizedPic(String resizedPic) {
+        this.resizedPic = resizedPic;
     }
 
     public boolean assigneeIsEmpty() {
